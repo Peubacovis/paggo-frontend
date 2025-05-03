@@ -63,7 +63,7 @@ export default function DashboardPage() {
       try {
         if (!token) return;
 
-        const response = await fetch('http://localhost:3001/documents?userId=1234', {  // Modificado para passar o userId como parâmetro
+        const response = await fetch('http://localhost:3001/documents?userId=1234', {
           method: 'GET',
           headers: { 'Authorization': `Bearer ${token}` },
         });
@@ -127,6 +127,47 @@ export default function DashboardPage() {
       month: 'long',
       day: 'numeric',
     });
+  };
+
+  // Função para baixar o texto extraído
+  const downloadDocument = async (filename: string) => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) throw new Error('Token não encontrado');
+
+      const response = await fetch(`http://localhost:3001/documents/download-text/${filename}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Falha no download');
+      }
+
+      const blob = await response.blob();
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `${filename}.txt`; // Usa o nome do arquivo para download
+      link.click();
+    } catch (error) {
+      console.error('Erro ao baixar o documento', error);
+    }
+  };
+
+  // Componente para exibir a lista de documentos
+  const DocumentList = ({ documents }: { documents: Document[] }) => {
+    return (
+      <div>
+        {documents.map((document) => (
+          <div key={document.id}>
+            <h3>{document.filename}</h3>
+            <button onClick={() => downloadDocument(document.filename)}>Baixar</button>
+          </div>
+        ))}
+      </div>
+    );
   };
 
   return (
@@ -195,18 +236,7 @@ export default function DashboardPage() {
             {documents.length === 0 ? (
               <p className="text-center text-gray-500">Nenhum documento encontrado</p>
             ) : (
-              <ul className="divide-y">
-                {documents.map((doc: Document) => (
-                  <li key={doc.id} className="py-3">
-                    <div className="flex justify-between">
-                      <span>{doc.filename}</span>
-                      <span className="text-sm text-gray-500">
-                        {formatDate(doc.createdAt)}
-                      </span>
-                    </div>
-                  </li>
-                ))}
-              </ul>
+              <DocumentList documents={documents} />
             )}
           </div>
         )}
