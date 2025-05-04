@@ -1,6 +1,6 @@
 # Paggo - OCR Case (Frontend)
 
-Este é o frontend do projeto do precesso seletivo da **Paggo**, um sistema que permite o upload de documentos, extração de texto via OCR e perguntas interativas com base nas informações extraídas, utilizando LLM (como o GPT-4).
+Este é o frontend do projeto do processo seletivo da **Paggo**, um sistema que permite o upload de documentos, extração de texto via OCR e perguntas interativas com base nas informações extraídas, utilizando LLM (como o GPT-4).
 
 ---
 
