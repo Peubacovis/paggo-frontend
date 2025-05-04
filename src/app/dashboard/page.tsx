@@ -121,6 +121,7 @@ export default function DashboardPage() {
   const [selectedText, setSelectedText] = useState<string | null>(null);
   const [selectedFilename, setSelectedFilename] = useState<string | null>(null)
 
+  // Função para formatar a data
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     if (isNaN(date.getTime())) {
@@ -135,13 +136,15 @@ export default function DashboardPage() {
   };
 
   // Chamada da API para seu backend NestJS
-  const handleAskLLM = async (selectedText: string) => {
+  const handleAskLLM = async (ocrText: string) => {
+    if (!ocrText) return;
+
     const response = await fetch('http://localhost:3000/llm/explain', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ text: selectedText }),
+      body: JSON.stringify({ text: ocrText }),
     });
 
     const data = await response.json();
@@ -175,7 +178,6 @@ export default function DashboardPage() {
     }
   };
 
-
   const DocumentList = ({ documents }: { documents: Document[] }) => {
     return (
       <div>
@@ -189,12 +191,11 @@ export default function DashboardPage() {
             >
               Baixar Texto Extraído
             </button>
-            <button
-              onClick={() => handleAskLLM(document.filename)}
+            {/* <button
+              onClick={() => handleAskLLM(document.ocrText)} // Passa o texto OCR, não o filename
               className="ml-2 text-blue-600 hover:underline"
             >
-              Perguntar à LLM
-            </button>
+            </button> */}
             {/* Novo componente para interação com o LLM */}
             <AskLLM documentText={document.ocrText} />
           </div>
