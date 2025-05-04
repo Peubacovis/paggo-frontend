@@ -22,20 +22,13 @@ export default function RegisterPage() {
         body: JSON.stringify({ name, email, password }),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Erro no registro');
-      }
+      if (!response.ok) throw new Error('Erro ao criar a conta');
 
-      // Redireciona para login após registro
-      router.push('/login?registered=true');
-      
-    } catch (err: any) {
-      setError(err.message.includes('Email already exists') 
-        ? 'Este email já está cadastrado' 
-        : 'Erro ao criar conta');
-    } finally {
-      setIsLoading(false);
+      const data = await response.json();
+      alert('Conta criada com sucesso!');  // Simples alerta
+      router.push('/login');  // Redireciona para a página de login
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Erro desconhecido');
     }
   };
 

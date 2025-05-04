@@ -13,26 +13,7 @@ export default function LoginPage() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      const res = await fetch('http://localhost:3001/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (!res.ok) throw new Error('Credenciais inválidas');
-
-      const { accessToken } = await res.json();
-
-      // ← Aqui você armazena e loga o token:
-      localStorage.setItem('token', accessToken);
-      console.log('Token armazenado:', accessToken);
-
-      // Redireciona para o dashboard
-      router.push('/dashboard');
-    } catch (err) {
-    setError(err instanceof Error ? err.message : 'Erro desconhecido');
-    }
+    setError('');
     setIsLoading(true);
 
     try {
@@ -71,7 +52,10 @@ export default function LoginPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100">
-      <form onSubmit={handleLogin}>
+      <form
+        onSubmit={handleLogin}
+        className="bg-white p-8 rounded-lg shadow-md w-full max-w-md"
+      >
         <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Login</h2>
 
         {error && (
