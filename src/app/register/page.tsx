@@ -24,7 +24,6 @@ export default function RegisterPage() {
 
       if (!response.ok) throw new Error('Erro ao criar a conta');
 
-      const data = await response.json();
       alert('Conta criada com sucesso!');  // Simples alerta
       router.push('/login');  // Redireciona para a página de login
     } catch (err) {

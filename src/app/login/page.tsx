@@ -42,9 +42,14 @@ export default function LoginPage() {
       // Redireciona para a dashboard
       router.push('/dashboard');
 
-    } catch (err: any) {
-      console.error('Erro no login:', err);
-      setError(err.message || 'Falha na conexão com o servidor. Verifique sua rede ou tente novamente.');
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error('Erro no login:', err);
+        setError(err.message || 'Falha na conexão com o servidor. Verifique sua rede ou tente novamente.');
+      } else {
+        console.error('Erro desconhecido:', err);
+        setError('Falha inesperada. Tente novamente mais tarde.');
+      }
     } finally {
       setIsLoading(false);
     }

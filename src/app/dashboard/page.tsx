@@ -19,42 +19,11 @@ export default function DashboardPage() {
   const [documents, setDocuments] = useState<Document[]>([]);
 
   // Estado para login
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
 
   // Função de logout
   const handleLogout = () => {
     localStorage.removeItem('token');
     router.push('/login');
-  };
-
-  // Função de login
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    try {
-      const res = await fetch('http://localhost:3001/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (!res.ok) throw new Error('Credenciais inválidas');
-
-      const data = await res.json();
-      console.log('Resposta do login:', data);
-
-      const token = data.accessToken || data.token || data.jwt;
-
-      if (!token) throw new Error('Token não encontrado na resposta');
-
-      localStorage.setItem('token', token);
-      console.log('Token armazenado:', token);
-
-      router.push('/dashboard');
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erro desconhecido');
-    }
   };
 
   // Carregar documentos
@@ -117,9 +86,6 @@ export default function DashboardPage() {
       setIsUploading(false);
     }
   };
-
-  const [selectedText, setSelectedText] = useState<string | null>(null);
-  const [selectedFilename, setSelectedFilename] = useState<string | null>(null)
 
   // Função para formatar a data
   const formatDate = (dateString: string) => {
