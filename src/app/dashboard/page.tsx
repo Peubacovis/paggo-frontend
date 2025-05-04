@@ -1,11 +1,13 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { AskLLM } from '../components/AskLLM';
 
 interface Document {
   id: string;
   filename: string;
   createdAt: string;
+  ocrText: string;
 }
 
 export default function DashboardPage() {
@@ -116,6 +118,9 @@ export default function DashboardPage() {
     }
   };
 
+  const [selectedText, setSelectedText] = useState<string | null>(null);
+  const [selectedFilename, setSelectedFilename] = useState<string | null>(null)
+
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     if (isNaN(date.getTime())) {
@@ -127,6 +132,20 @@ export default function DashboardPage() {
       month: 'long',
       day: 'numeric',
     });
+  };
+
+  // Chamada da API para seu backend NestJS
+  const handleAskLLM = async (selectedText: string) => {
+    const response = await fetch('http://localhost:3000/llm/explain', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ text: selectedText }),
+    });
+
+    const data = await response.json();
+    console.log(data.explanation);
   };
 
   // Função para baixar o texto extraído
@@ -156,14 +175,28 @@ export default function DashboardPage() {
     }
   };
 
-  // Componente para exibir a lista de documentos
+
   const DocumentList = ({ documents }: { documents: Document[] }) => {
     return (
       <div>
         {documents.map((document) => (
-          <div key={document.id}>
-            <h3>{document.filename}</h3>
-            <button onClick={() => downloadDocument(document.filename)}>Baixar</button>
+          <div key={document.id} className="border p-4 mb-4 rounded shadow">
+            <h3 className="text-lg font-semibold">{document.filename}</h3>
+            <p className="text-sm text-gray-500">Criado em: {formatDate(document.createdAt)}</p>
+            <button
+              onClick={() => downloadDocument(document.filename)}
+              className="mt-2 text-blue-500 underline"
+            >
+              Baixar Texto Extraído
+            </button>
+            <button
+              onClick={() => handleAskLLM(document.filename)}
+              className="ml-2 text-blue-600 hover:underline"
+            >
+              Perguntar à LLM
+            </button>
+            {/* Novo componente para interação com o LLM */}
+            <AskLLM documentText={document.ocrText} />
           </div>
         ))}
       </div>
