@@ -17,12 +17,12 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      // URL do backend - ajuste se necessário
-      const backendUrl = 'http://localhost:3001/auth/login';
-      
+      // Use a URL configurada no Vercel com uma variável de ambiente
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001/auth/login'; // URL local como fallback
+
       const response = await fetch(backendUrl, {
         method: 'POST',
-        headers: { 
+        headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email, password }),
@@ -35,10 +35,10 @@ export default function LoginPage() {
       }
 
       const data = await response.json();
-      
+
       // Salva o token no localStorage
       localStorage.setItem('token', data.access_token);
-      
+
       // Redireciona para a dashboard
       router.push('/dashboard');
 
@@ -65,27 +65,26 @@ export default function LoginPage() {
         )}
 
         <div className="mb-4">
-        <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
             Email
-        </label>
-        <input
+          </label>
+          <input
             type="email"
             id="email"
             className="w-full px-3 py-2 border border-gray-300 rounded-md"
             value={email}
             onChange={(e) => {
-            const value = e.target.value;
-            setEmail(value);
-            
-            // Validação idêntica ao register
-            if (value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+              const value = e.target.value;
+              setEmail(value);
+              // Validação idêntica ao register
+              if (value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
                 setError('Email inválido');
-            } else {
+              } else {
                 setError('');
-            }
+              }
             }}
             required
-        />
+          />
         </div>
 
         <div className="mb-6">
@@ -95,8 +94,7 @@ export default function LoginPage() {
           <input
             type="password"
             id="password"
-            placeholder="••••••••"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
@@ -106,15 +104,14 @@ export default function LoginPage() {
         <button
           type="submit"
           disabled={isLoading}
-          className={`w-full py-2 px-4 rounded-md text-white font-medium ${isLoading ? 'bg-blue-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'} transition-colors`}
+          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:bg-gray-400"
         >
           {isLoading ? 'Carregando...' : 'Entrar'}
         </button>
 
-        <div className="mt-4 text-center text-sm text-gray-600">
-          Não tem uma conta?{' '}
-          <Link href="/register" className="text-blue-600 hover:underline">
-            Cadastre-se
+        <div className="mt-4 text-center">
+          <Link href="/register" className="text-blue-500 hover:text-blue-600">
+            Não tem uma conta? Registre-se
           </Link>
         </div>
       </form>
