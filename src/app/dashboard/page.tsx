@@ -135,22 +135,6 @@ export default function DashboardPage() {
     });
   };
 
-  // Chamada da API para seu backend NestJS
-  const handleAskLLM = async (ocrText: string) => {
-    if (!ocrText) return;
-
-    const response = await fetch('http://localhost:3000/llm/explain', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ text: ocrText }),
-    });
-
-    const data = await response.json();
-    console.log(data.explanation);
-  };
-
   // Função para baixar o texto extraído
   const downloadDocument = async (filename: string) => {
     try {
@@ -191,11 +175,6 @@ export default function DashboardPage() {
             >
               Baixar Texto Extraído
             </button>
-            {/* <button
-              onClick={() => handleAskLLM(document.ocrText)} // Passa o texto OCR, não o filename
-              className="ml-2 text-blue-600 hover:underline"
-            >
-            </button> */}
             {/* Novo componente para interação com o LLM */}
             <AskLLM documentText={document.ocrText} />
           </div>
@@ -222,59 +201,44 @@ export default function DashboardPage() {
                 className={`${activeTab === 'documents' ? 'text-blue-600' : 'text-gray-500'}`}
                 onClick={() => setActiveTab('documents')}
               >
-                Documentos ({documents.length})
+                Documentos
               </button>
             </div>
-            <button
-              onClick={handleLogout}
-              className="text-red-600 hover:text-red-800"
-            >
-              Sair
-            </button>
+            <div>
+              <button
+                onClick={handleLogout}
+                className="bg-blue-500 text-white px-4 py-2 rounded"
+              >
+                Sair
+              </button>
+            </div>
           </div>
         </div>
       </nav>
 
-      {/* Conteúdo Principal */}
-      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+      {/* Conteúdo */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {activeTab === 'upload' ? (
-          <div className="bg-white p-6 rounded-lg shadow">
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-              <input
-                type="file"
-                id="file-upload"
-                onChange={(e) => setFile(e.target.files?.[0] || null)}
-                className="hidden"
-              />
-              <label
-                htmlFor="file-upload"
-                className="cursor-pointer bg-blue-500 text-white px-4 py-2 rounded-md inline-block hover:bg-blue-600"
-              >
-                {file ? file.name : 'Selecionar Arquivo'}
-              </label>
-
-              {file && (
-                <button
-                  onClick={handleUpload}
-                  disabled={isUploading}
-                  className="mt-4 bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 disabled:bg-gray-400 block mx-auto"
-                >
-                  {isUploading ? 'Enviando...' : 'Enviar Arquivo'}
-                </button>
-              )}
-              {error && <p className="mt-4 text-red-500">{error}</p>}
-            </div>
+          <div>
+            <h2 className="text-xl mb-4">Enviar Documento</h2>
+            <input
+              type="file"
+              onChange={(e) => setFile(e.target.files ? e.target.files[0] : null)}
+              className="border p-2"
+            />
+            {error && <p className="text-red-500 mt-2">{error}</p>}
+            <button
+              onClick={handleUpload}
+              disabled={isUploading || !file}
+              className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
+            >
+              {isUploading ? 'Subindo...' : 'Enviar'}
+            </button>
           </div>
         ) : (
-          <div className="bg-white p-6 rounded-lg shadow">
-            {documents.length === 0 ? (
-              <p className="text-center text-gray-500">Nenhum documento encontrado</p>
-            ) : (
-              <DocumentList documents={documents} />
-            )}
-          </div>
+          <DocumentList documents={documents} />
         )}
-      </main>
+      </div>
     </div>
   );
 }

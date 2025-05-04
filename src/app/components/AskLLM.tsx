@@ -1,49 +1,61 @@
 'use client';
 
 import { useState } from 'react';
-import { askLLM } from '../services/llm';
 
-export function AskLLM({ documentText }: { documentText: string }) {
-  const [question, setQuestion] = useState('');
-  const [answer, setAnswer] = useState('');
+interface AskLLMProps {
+  documentText: string;
+}
+
+export const AskLLM = ({ documentText }: AskLLMProps) => {
+  const [input, setInput] = useState('');
+  const [response, setResponse] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleAsk = async () => {
-    if (!question.trim()) return;
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!input) return;
+
     setLoading(true);
+    setError(null);
     try {
-      const response = await askLLM(documentText, question);
-      setAnswer(response);
+      const res = await fetch('http://localhost:3001/llm/explain', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: input }),
+      });
+
+      if (!res.ok) throw new Error('Erro ao processar sua solicitação');
+
+      const data = await res.json();
+      setResponse(data.explanation);
     } catch (err) {
-      setAnswer('Erro ao consultar o assistente.');
+      setError(err instanceof Error ? err.message : 'Erro desconhecido');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="p-4 border rounded-xl shadow-md mt-6">
-      <h2 className="font-semibold mb-2">Pergunte sobre este documento</h2>
-      <textarea
-        value={question}
-        onChange={(e) => setQuestion(e.target.value)}
-        placeholder="Digite sua pergunta..."
-        className="w-full p-2 border rounded mb-2"
-        rows={4}
-      />
-      <button
-        onClick={handleAsk}
-        className="bg-blue-600 text-white px-4 py-2 rounded"
-        disabled={loading}
-      >
-        {loading ? 'Consultando...' : 'Perguntar'}
-      </button>
-      {answer && (
-        <div className="mt-4 bg-gray-100 p-3 rounded">
-          <strong>Resposta:</strong>
-          <p>{answer}</p>
-        </div>
-      )}
+    <div className="mt-4">
+      <h4 className="text-xl font-semibold">Interaja com o LLM</h4>
+      <form onSubmit={handleSubmit}>
+        <textarea
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="Faça uma pergunta sobre o documento..."
+          className="w-full p-2 border border-gray-300 rounded-md"
+        />
+        <button
+          type="submit"
+          disabled={loading}
+          className="mt-2 bg-blue-500 text-white px-4 py-2 rounded-md"
+        >
+          {loading ? 'Carregando...' : 'Enviar'}
+        </button>
+      </form>
+      {error && <p className="text-red-500 mt-2">{error}</p>}
+      {response && <p className="mt-4">{response}</p>}
     </div>
   );
-}
+};
