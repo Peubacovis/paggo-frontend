@@ -16,7 +16,7 @@ export default function AskLLM({ documentText }: AskLLMProps) {
   const handleAsk = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch('/api/ask', {
+      const res = await fetch('http://localhost:3001/llm/explain', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ question, documentText }),
