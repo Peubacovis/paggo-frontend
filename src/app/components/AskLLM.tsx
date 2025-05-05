@@ -14,7 +14,7 @@ export default function AskLLM({ documentText }: AskLLMProps) {
   const handleAsk = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://seu-backend-no-render.onrender.com'}/llm/explain`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://paggo-backend-a0hc.onrender.com'}/llm/explain`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ question, documentText }),
