@@ -182,7 +182,7 @@ export default function DashboardPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {activeTab === 'upload' ? (
           <div>
-            <h2 className="text-xl mb-4">Enviar Documento</h2>
+            <h2 className="text-xl mb-4">  Envie uma imagem (ex: nota fiscal) contendo texto para extração e análise com IA.</h2>
             <input
               type="file"
               onChange={(e) => setFile(e.target.files ? e.target.files[0] : null)}
