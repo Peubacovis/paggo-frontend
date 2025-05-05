@@ -18,7 +18,7 @@ export default function LoginPage() {
 
     try {
       // Use a URL configurada no Vercel com uma variável de ambiente
-      const backendUrl = process.env.REACT_APP_API_URL || 'https://paggo-backend-a0hc.onrender.com'; // URL local como fallback
+      const backendUrl = process.env.REACT_APP_API_URL || 'https://paggo-backend-a0hc.onrender.com/auth/login'; // URL local como fallback
 
       const response = await fetch(backendUrl, {
         method: 'POST',
