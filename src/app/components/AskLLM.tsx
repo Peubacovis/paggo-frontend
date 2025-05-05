@@ -6,7 +6,7 @@ interface AskLLMProps {
   documentText: string;
 }
 
-export const AskLLM = ({ documentText }: AskLLMProps) => {
+export const AskLLM = ({  }: AskLLMProps) => {
   const [input, setInput] = useState('');
   const [response, setResponse] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
