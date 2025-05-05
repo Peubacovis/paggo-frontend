@@ -43,7 +43,7 @@ npm install
 Crie um arquivo `.env.local` na raiz do projeto com o seguinte conteúdo (ajuste as URLs conforme necessário):
 
 ```
-NEXT_PUBLIC_API_URL=http://localhost:3001
+NEXT_PUBLIC_API_URL=http://localhost:3002
 NEXTAUTH_URL=http://localhost:3000
 NEXTAUTH_SECRET=sua_chave_secreta
 ```

@@ -1,5 +1,5 @@
 export async function askLLM(text: string): Promise<string> {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002';
   console.log('URL:', apiUrl);
 
   const res = await fetch(`${apiUrl}/llm/explain`, {  // Corrigido para /explain

@@ -35,7 +35,7 @@ export default function DashboardPage() {
       try {
         if (!token) return;
 
-        const response = await fetch('http://localhost:3001/documents?userId=1234', {
+        const response = await fetch('http://localhost:3002/documents?userId=1234', {
           method: 'GET',
           headers: { 'Authorization': `Bearer ${token}` },
         });
@@ -66,7 +66,7 @@ export default function DashboardPage() {
       const formData = new FormData();
       formData.append('file', file); // <- Aqui o nome 'file' deve bater com o @UploadedFile('file')
 
-      const response = await fetch('http://localhost:3001/documents/upload', {
+      const response = await fetch('http://localhost:3002/documents/upload', {
         method: 'POST', // Alterado para POST
         headers: {
           Authorization: `Bearer ${token}`, // <- sem Content-Type, o fetch cuida disso com FormData
@@ -108,7 +108,7 @@ export default function DashboardPage() {
       const token = localStorage.getItem('token');
       if (!token) throw new Error('Token não encontrado');
 
-      const response = await fetch(`http://localhost:3001/documents/download-text/${filename}`, {
+      const response = await fetch(`http://localhost:3002/documents/download-text/${filename}`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
