@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://seu-backend-no-render.onrender.com';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://paggo-backend-a0hc.onrender.com';
 
 export default function RegisterPage() {
   const router = useRouter();
