@@ -38,7 +38,7 @@ export default function AskLLM({ documentText }: AskLLMProps) {
 
   return (
     <div className="mt-6 p-4 border rounded-lg shadow">
-      <h2 className="text-lg font-semibold mb-2">Pergunte sobre o documento</h2>
+      <h2 className="text-lg font-semibold mb-2">Pergunte sobre o documento a IA</h2>
       <textarea
         className="w-full border rounded p-2 mb-2"
         rows={3}
