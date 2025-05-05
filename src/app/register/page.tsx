@@ -7,7 +7,6 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://paggo-backend-a
 
 export default function RegisterPage() {
   const router = useRouter();
-  const [name, setName] = useState(''); // Adicionei o estado para o nome
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
