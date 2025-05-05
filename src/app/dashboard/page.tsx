@@ -1,7 +1,8 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { AskLLM } from '../components/AskLLM';
+import AskLLM from '../components/AskLLM';
+
 
 interface Document {
   id: string;
