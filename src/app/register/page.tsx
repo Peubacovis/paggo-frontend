@@ -35,28 +35,28 @@ export default function RegisterPage() {
     <div className="flex min-h-screen items-center justify-center bg-gray-100">
       <form onSubmit={handleRegister} className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
         <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Criar Conta</h2>
-        
+
         {error && <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md">{error}</div>}
 
         <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-        <input
+          <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+          <input
             type="email"
             className="w-full px-3 py-2 border border-gray-300 rounded-md"
             value={email}
             onChange={(e) => {
-            const value = e.target.value;
-            setEmail(value);
-            
-            // Validação em tempo real
-            if (value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+              const value = e.target.value;
+              setEmail(value);
+
+              // Validação em tempo real
+              if (value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
                 setError('Email inválido');
-            } else {
+              } else {
                 setError(''); // Limpa o erro se estiver correto
-            }
+              }
             }}
             required
-        />
+          />
         </div>
 
         <div className="mb-6">
@@ -74,9 +74,8 @@ export default function RegisterPage() {
         <button
           type="submit"
           disabled={isLoading}
-          className={`w-full py-2 px-4 rounded-md text-white font-medium ${
-            isLoading ? 'bg-blue-400' : 'bg-blue-600 hover:bg-blue-700'
-          }`}
+          className={`w-full py-2 px-4 rounded-md text-white font-medium ${isLoading ? 'bg-blue-400' : 'bg-blue-600 hover:bg-blue-700'
+            }`}
         >
           {isLoading ? 'Criando conta...' : 'Registrar'}
         </button>
