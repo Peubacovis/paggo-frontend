@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import AskLLM from '../components/AskLLM';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://paggo-backend-a0hc.onrender.com';
 
 interface Document {
   id: string;
@@ -19,9 +20,6 @@ export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState<'upload' | 'documents'>('upload');
   const [documents, setDocuments] = useState<Document[]>([]);
 
-  // Estado para login
-
-  // Função de logout
   const handleLogout = () => {
     localStorage.removeItem('token');
     router.push('/login');
@@ -31,17 +29,17 @@ export default function DashboardPage() {
   useEffect(() => {
     const fetchDocuments = async () => {
       const token = localStorage.getItem('token');
-      console.log('Token:', token); // Verifique se existe
+      console.log('Token:', token);
       try {
         if (!token) return;
 
-        const response = await fetch('http://localhost:3002/documents?userId=1234', {
+        const response = await fetch(`${API_BASE_URL}/documents?userId=1234`, {
           method: 'GET',
           headers: { 'Authorization': `Bearer ${token}` },
         });
         const data = await response.json();
         console.log('Resposta da API:', data);
-        setDocuments(Array.isArray(data.data) ? data.data : data.documents || []); // Ajuste aqui
+        setDocuments(Array.isArray(data.data) ? data.data : data.documents || []);
       } catch (err) {
         console.error('Erro ao carregar documentos:', err);
       }
@@ -64,12 +62,12 @@ export default function DashboardPage() {
       if (!token) throw new Error('Token não encontrado');
 
       const formData = new FormData();
-      formData.append('file', file); // <- Aqui o nome 'file' deve bater com o @UploadedFile('file')
+      formData.append('file', file);
 
-      const response = await fetch('http://localhost:3002/documents/upload', {
-        method: 'POST', // Alterado para POST
+      const response = await fetch(`${API_BASE_URL}/documents/upload`, {
+        method: 'POST',
         headers: {
-          Authorization: `Bearer ${token}`, // <- sem Content-Type, o fetch cuida disso com FormData
+          Authorization: `Bearer ${token}`,
         },
         body: formData,
       });
@@ -80,7 +78,7 @@ export default function DashboardPage() {
       }
 
       setFile(null);
-      setActiveTab('documents'); // Mostra a lista após upload
+      setActiveTab('documents');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erro desconhecido');
     } finally {
@@ -95,7 +93,7 @@ export default function DashboardPage() {
       return 'Data inválida';
     }
     return date.toLocaleDateString('pt-BR', {
-      weekday: 'long', // Dia da semana, como "segunda-feira"
+      weekday: 'long',
       year: 'numeric',
       month: 'long',
       day: 'numeric',
@@ -108,7 +106,7 @@ export default function DashboardPage() {
       const token = localStorage.getItem('token');
       if (!token) throw new Error('Token não encontrado');
 
-      const response = await fetch(`http://localhost:3002/documents/download-text/${filename}`, {
+      const response = await fetch(`${API_BASE_URL}/documents/download-text/${filename}`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -122,7 +120,7 @@ export default function DashboardPage() {
       const blob = await response.blob();
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
-      link.download = `${filename}.txt`; // Usa o nome do arquivo para download
+      link.download = `${filename}.txt`;
       link.click();
     } catch (error) {
       console.error('Erro ao baixar o documento', error);
@@ -142,7 +140,6 @@ export default function DashboardPage() {
             >
               Baixar Texto Extraído
             </button>
-            {/* Novo componente para interação com o LLM */}
             <AskLLM documentText={document.ocrText} />
           </div>
         ))}
@@ -152,7 +149,6 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Navbar */}
       <nav className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
@@ -183,7 +179,6 @@ export default function DashboardPage() {
         </div>
       </nav>
 
-      {/* Conteúdo */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {activeTab === 'upload' ? (
           <div>
