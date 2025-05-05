@@ -192,10 +192,14 @@ export default function DashboardPage() {
             <button
               onClick={handleUpload}
               disabled={isUploading || !file}
-              className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
+              className={`mt-4 px-5 py-2 rounded-lg font-medium text-white transition 
+              ${isUploading || !file
+                  ? 'bg-gray-400 cursor-not-allowed'
+                  : 'bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 shadow-md hover:shadow-lg'}`}
             >
-              {isUploading ? 'Subindo...' : 'Enviar'}
+              {isUploading ? 'Subindo...' : '🚀 Enviar'}
             </button>
+
           </div>
         ) : (
           <DocumentList documents={documents} />
