@@ -67,13 +67,6 @@ Acesse em: [http://localhost:3000](http://localhost:3000)
 /styles           # Estilos globais (Tailwind)
 ```
 
-## ✅ Próximas melhorias (To Do)
-
-- ⏳ Mostrar feedback visual durante o upload de documentos
-- ⏳ Melhorar estilização do dashboard (ex: card de documento)
-- ⏳ Implementar logout e persistência de sessão
-- ⏳ Testes automatizados básicos
-
 ## 🚀 Deploy
 
 Recomendado usar [Vercel](https://vercel.com/) para deploy da aplicação Next.js.
